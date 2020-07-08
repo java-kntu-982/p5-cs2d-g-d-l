@@ -1,4 +1,4 @@
-package ir.ac.kntu.cs2d.server;
+package ir.ac.kntu.cs2d.view;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -70,23 +70,24 @@ public class ServerMain extends Application {
             }
         }
 
-        ParallelCamera camera = new ParallelCamera();
-        camera.setScaleY(0.24);
-        camera.setScaleX(0.24);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if(event.getCode().equals(KeyCode.RIGHT)){
-                camera.setTranslateX(camera.getTranslateX()+5);
-            } else if(event.getCode().equals(KeyCode.LEFT)){
-                camera.setTranslateX(camera.getTranslateX()-5);
-            }else if(event.getCode().equals(KeyCode.UP)){
-                camera.setTranslateY(camera.getTranslateY()-5);
-            }else if(event.getCode().equals(KeyCode.DOWN)){
-                camera.setTranslateY(camera.getTranslateY()+5);
-            }
-        });
-        scene.setCamera(camera);
-
+//        ParallelCamera camera = new ParallelCamera();
+//        camera.setScaleY(0.24);
+//        camera.setScaleX(0.24);
+//        scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+//            if(event.getCode().equals(KeyCode.RIGHT)){
+//                camera.setTranslateX(camera.getTranslateX()+5);
+//            } else if(event.getCode().equals(KeyCode.LEFT)){
+//                camera.setTranslateX(camera.getTranslateX()-5);
+//            }else if(event.getCode().equals(KeyCode.UP)){
+//                camera.setTranslateY(camera.getTranslateY()-5);
+//            }else if(event.getCode().equals(KeyCode.DOWN)){
+//                camera.setTranslateY(camera.getTranslateY()+5);
+//            }
+//        });
+//        scene.setCamera(camera);
+//
         root.getChildren().addAll(rectangles);
-        root.getChildren().add(camera);
+//        root.getChildren().add(camera);
     }
 }
+

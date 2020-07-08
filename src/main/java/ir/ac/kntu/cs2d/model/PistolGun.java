@@ -1,6 +1,6 @@
-package ir.ac.kntu.cs2d.guns;
+package ir.ac.kntu.cs2d.model;
 
-public class Pistol extends Gun {
+public class PistolGun extends Gun{
 
     public void createDeagle(){
         this.name = "Deagle";
