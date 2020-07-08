@@ -29,7 +29,7 @@ public class ServerMain extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Group root = new Group();
-        Scene scene = new Scene(root,600,600,true);
+        Scene scene = new Scene(root,840,700,true);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -52,7 +52,7 @@ public class ServerMain extends Application {
         for(int i=0;i<mapTable.size();i++){
             for(int j=0;j<mapTable.get(i).size();j++){
 
-                Rectangle rectangle =new Rectangle(5,5);
+                Rectangle rectangle =new Rectangle(7,7);
 
                 switch ((mapTable.get(i).get(j))){
                     case 0:rectangle.setFill(Color.rgb(255,255,255));break;
@@ -65,15 +65,14 @@ public class ServerMain extends Application {
                     case 8:rectangle.setFill(Color.rgb(254,181,206));break;
                 }
                 rectangles.add(rectangle);
-                rectangle.setX(5 * j);
-                rectangle.setY(5 * i);
-                rectangle.setStrokeWidth(0);
+                rectangle.setX(7 * j);
+                rectangle.setY(7 * i);
             }
         }
 
         ParallelCamera camera = new ParallelCamera();
-        camera.setScaleY(0.2);
-        camera.setScaleX(0.2);
+        camera.setScaleY(0.24);
+        camera.setScaleX(0.24);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if(event.getCode().equals(KeyCode.RIGHT)){
                 camera.setTranslateX(camera.getTranslateX()+5);
