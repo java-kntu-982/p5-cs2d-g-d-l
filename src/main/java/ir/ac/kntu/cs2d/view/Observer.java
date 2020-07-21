@@ -63,7 +63,7 @@ public class Observer  {
         submit.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if (UName.getText() != null && !UName.getText().isEmpty() && !UName.getText().trim().isEmpty()){
+                if (UName.getText() != null && !UName.getText().isEmpty()){
                     System.out.println("Hello");
                     try {
                         clientMenu().show();
