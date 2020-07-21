@@ -6,33 +6,27 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class Client extends Application {
+public class Client {
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        Socket sock=null;
-        int serverPort=50128;
-        String hostAddress="127.0.0.1";
+    public static ArrayList<PlayerModel> players = new ArrayList<>();
 
-        while (true){
-            try
-            {
-                sock = new Socket(hostAddress, serverPort);
-                System.out.println("Connected to server successfully ...");
-                Observer.enterName().show();
+    public static void main(String []args){
+        Scanner input = new Scanner(System.in);
+
+        PlayerModel player = new PlayerModel();
+        players.add(player);
+        int answer;
+/*        while (true){
+            System.out.println("Enter 1 to add a player");
+            answer = input.nextInt();
+            if(answer == 1){
+                *//*PlayerModel player = new PlayerModel();
+                players.add(player);*//*
                 break;
-
             }
-            catch(IOException io)
-            {
-                System.out.println("Connection error!");
-            }
-
-        }
-
-    }
-    public static void main() {
-        launch();
+        }*/
     }
 }

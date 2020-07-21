@@ -1,48 +1,42 @@
 package ir.ac.kntu.cs2d.view;
 
-import ir.ac.kntu.cs2d.presenter.Client;
-import javafx.animation.AnimationTimer;
-import javafx.application.Application;
+import ir.ac.kntu.cs2d.presenter.PlayerModel;
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.*;
+import javafx.scene.Group;
+import javafx.scene.ImageCursor;
+import javafx.scene.ParallelCamera;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.util.LinkedList;
 
 public class Observer  {
-    public static Stage enterName() throws Exception{
-        Stage stage=new Stage();
+
+    static LinkedList<Stage> stages = new LinkedList<>();
+
+    public static Stage createStage(){
+        Stage stage = new Stage();
+        stage.show();
+        stages.add(stage);
+        return stage;
+    }
+    public static void enterName(Stage stage) throws Exception{
         Image image = new Image(new FileInputStream("./src/main/resources/images/mnm1.jpg"));
         ImageView imageView = new ImageView(image);
         imageView.setX(0);
@@ -60,20 +54,17 @@ public class Observer  {
         vBox.setTranslateY(350);
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(userName,UName,submit);
-        submit.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (UName.getText() != null && !UName.getText().isEmpty()){
-                    System.out.println("Hello");
-                    try {
-                        stage.setScene(clientMenu(stage));
-                    } catch (FileNotFoundException fileNotFoundException) {
-                        fileNotFoundException.printStackTrace();
-                    }
+        submit.setOnMouseClicked(mouseEvent -> {
+            if (UName.getText() != null && !UName.getText().isEmpty()){
+                try {
+                    PlayerModel.setName(UName.getText());
+                    stage.setScene(clientMenu(stage));
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
                 }
-                else {
-                    System.out.println("Please enter your User Name");
-                }
+            }
+            else {
+                System.out.println("Please enter your User Name");
             }
         });
 
@@ -82,8 +73,6 @@ public class Observer  {
         root.getChildren().addAll(vBox);
         stage.setTitle("CS2D");
         stage.setScene(scene);
-
-        return stage;
     }
 
     public static Scene clientMenu(Stage stage) throws FileNotFoundException {
@@ -98,33 +87,22 @@ public class Observer  {
         start.setTranslateX(330);
         start.setTranslateY(450);
         start.setTextFill(Color.WHITE);
-        start.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                start.setScaleX(1.2);
-                start.setScaleY(1.2);
+        start.setOnMouseEntered(mouseEvent -> {
+            start.setScaleX(1.2);
+            start.setScaleY(1.2);
 
+        });
+        start.setOnMouseExited(mouseEvent -> {
+            start.setScaleX(1);
+            start.setScaleY(1);
+        });
+        start.setOnMouseClicked(mouseEvent -> {
+            try {
+                stage.setScene(startGame());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        start.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                start.setScaleX(1);
-                start.setScaleY(1);
-            }
-        });
-        start.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                try {
-                    stage.setScene(startGame());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
 
 
         Group root = new Group(imageView);
@@ -140,8 +118,23 @@ public class Observer  {
         Scene scene = new Scene(root,840,700,true);
         Stage primaryStage =new Stage();
         primaryStage.setScene(scene);
-        //primaryStage.show();
+        ParallelCamera camera = new ParallelCamera();
+        camera.setScaleY(0.24);
+        camera.setScaleX(0.24);
 
+        scene.setCamera(camera);
+
+        Circle playerPicture = new Circle();
+        playerPicture.setRadius(3);
+        playerPicture.setCenterY(80);
+        playerPicture.setCenterX(50);
+        playerPicture.setFill(new ImagePattern(new Image("file:src/main/resources/images/ct-top.png")));
+
+        ImageCursor cursor = new ImageCursor(new Image("file:src/main/resources/images/aim-cursor.png"));
+        scene.setCursor(cursor);
+
+        camera.setTranslateX(playerPicture.getCenterX()-scene.getWidth()*0.12);
+        camera.setTranslateY(playerPicture.getCenterY()-scene.getHeight()*0.12);
 
         ArrayList<ArrayList<Integer>> mapTable = new ArrayList<>();
         ArrayList<Rectangle> rectangles = new ArrayList<>();
@@ -182,23 +175,29 @@ public class Observer  {
 //        ParallelCamera camera = new ParallelCamera();
 //        camera.setScaleY(0.24);
 //        camera.setScaleX(0.24);
-//        scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-//            if(event.getCode().equals(KeyCode.RIGHT)){
-//                camera.setTranslateX(camera.getTranslateX()+5);
-//            } else if(event.getCode().equals(KeyCode.LEFT)){
-//                camera.setTranslateX(camera.getTranslateX()-5);
-//            }else if(event.getCode().equals(KeyCode.UP)){
-//                camera.setTranslateY(camera.getTranslateY()-5);
-//            }else if(event.getCode().equals(KeyCode.DOWN)){
-//                camera.setTranslateY(camera.getTranslateY()+5);
-//            }
-//        });
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if(event.getCode().equals(KeyCode.RIGHT)){
+                playerPicture.setCenterX(playerPicture.getCenterX()+5);
+            } else if(event.getCode().equals(KeyCode.LEFT)){
+                playerPicture.setCenterX(playerPicture.getCenterX()-5);
+            }else if(event.getCode().equals(KeyCode.UP)){
+                playerPicture.setCenterY(playerPicture.getCenterY()-5);
+            }else if(event.getCode().equals(KeyCode.DOWN)){
+                playerPicture.setCenterY(playerPicture.getCenterY()+5);
+            }
+
+            camera.setTranslateX(playerPicture.getCenterX()-scene.getWidth()*0.12);
+            camera.setTranslateY(playerPicture.getCenterY()-scene.getHeight()*0.12);
+        });
 //        scene.setCamera(camera);
 //
         root.getChildren().addAll(rectangles);
-//        root.getChildren().add(camera);
+        root.getChildren().addAll(playerPicture);
+        root.getChildren().add(camera);
         return scene;
     }
 
+    public static void addPlayer(Scene scene,Group group){
 
+    }
 }
