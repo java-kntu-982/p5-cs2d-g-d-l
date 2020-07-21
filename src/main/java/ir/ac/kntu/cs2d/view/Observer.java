@@ -66,7 +66,7 @@ public class Observer  {
                 if (UName.getText() != null && !UName.getText().isEmpty()){
                     System.out.println("Hello");
                     try {
-                        clientMenu().show();
+                        stage.setScene(clientMenu(stage));
                     } catch (FileNotFoundException fileNotFoundException) {
                         fileNotFoundException.printStackTrace();
                     }
@@ -86,8 +86,7 @@ public class Observer  {
         return stage;
     }
 
-    public static Stage clientMenu() throws FileNotFoundException {
-        Stage stage=new Stage();
+    public static Scene clientMenu(Stage stage) throws FileNotFoundException {
         Image image = new Image(new FileInputStream("./src/main/resources/images/mnm.jpg"));
         ImageView imageView = new ImageView(image);
         imageView.setX(0);
@@ -118,7 +117,7 @@ public class Observer  {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    startGame().show();
+                    stage.setScene(startGame());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -133,10 +132,10 @@ public class Observer  {
         root.getChildren().add(start);
         stage.setTitle("CS2D");
         stage.setScene(scene);
-        return stage;
+        return scene;
 
     }
-    public static Stage startGame() throws IOException {
+    public static Scene startGame() throws IOException {
         Group root = new Group();
         Scene scene = new Scene(root,840,700,true);
         Stage primaryStage =new Stage();
@@ -198,7 +197,7 @@ public class Observer  {
 //
         root.getChildren().addAll(rectangles);
 //        root.getChildren().add(camera);
-        return primaryStage;
+        return scene;
     }
 
 

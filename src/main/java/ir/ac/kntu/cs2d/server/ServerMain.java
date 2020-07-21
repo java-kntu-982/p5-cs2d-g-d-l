@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class ServerMain {
 
-        public static void main(String arg[]) throws IOException {
+        public static void main(String[] arg) throws IOException {
 
             ServerSocket socket = null;
 
