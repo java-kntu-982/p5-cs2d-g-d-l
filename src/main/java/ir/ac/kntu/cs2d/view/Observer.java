@@ -1,44 +1,21 @@
 package ir.ac.kntu.cs2d.view;
 
-import ir.ac.kntu.cs2d.presenter.Client;
-import javafx.animation.AnimationTimer;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.*;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class Observer  {
     public static Stage enterName() throws Exception{
@@ -60,20 +37,17 @@ public class Observer  {
         vBox.setTranslateY(350);
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(userName,UName,submit);
-        submit.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (UName.getText() != null && !UName.getText().isEmpty()){
-                    System.out.println("Hello");
-                    try {
-                        clientMenu().show();
-                    } catch (FileNotFoundException fileNotFoundException) {
-                        fileNotFoundException.printStackTrace();
-                    }
+        submit.setOnMouseClicked(mouseEvent -> {
+            if (UName.getText() != null && !UName.getText().isEmpty()){
+                System.out.println("Hello");
+                try {
+                    stage.setScene(clientMenu(stage));
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
                 }
-                else {
-                    System.out.println("Please enter your User Name");
-                }
+            }
+            else {
+                System.out.println("Please enter your User Name");
             }
         });
 
@@ -86,8 +60,7 @@ public class Observer  {
         return stage;
     }
 
-    public static Stage clientMenu() throws FileNotFoundException {
-        Stage stage=new Stage();
+    public static Scene clientMenu(Stage stage) throws FileNotFoundException {
         Image image = new Image(new FileInputStream("./src/main/resources/images/mnm.jpg"));
         ImageView imageView = new ImageView(image);
         imageView.setX(0);
@@ -99,29 +72,20 @@ public class Observer  {
         start.setTranslateX(330);
         start.setTranslateY(450);
         start.setTextFill(Color.WHITE);
-        start.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                start.setScaleX(1.2);
-                start.setScaleY(1.2);
+        start.setOnMouseEntered(mouseEvent -> {
+            start.setScaleX(1.2);
+            start.setScaleY(1.2);
 
-            }
         });
-        start.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                start.setScaleX(1);
-                start.setScaleY(1);
-            }
+        start.setOnMouseExited(mouseEvent -> {
+            start.setScaleX(1);
+            start.setScaleY(1);
         });
-        start.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                try {
-                    startGame().show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        start.setOnMouseClicked(mouseEvent -> {
+            try {
+                stage.setScene(startGame());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 
@@ -133,16 +97,14 @@ public class Observer  {
         root.getChildren().add(start);
         stage.setTitle("CS2D");
         stage.setScene(scene);
-        return stage;
+        return scene;
 
     }
-    public static Stage startGame() throws IOException {
+    public static Scene startGame() throws IOException {
         Group root = new Group();
         Scene scene = new Scene(root,840,700,true);
         Stage primaryStage =new Stage();
         primaryStage.setScene(scene);
-        //primaryStage.show();
-
 
         ArrayList<ArrayList<Integer>> mapTable = new ArrayList<>();
         ArrayList<Rectangle> rectangles = new ArrayList<>();
@@ -198,7 +160,7 @@ public class Observer  {
 //
         root.getChildren().addAll(rectangles);
 //        root.getChildren().add(camera);
-        return primaryStage;
+        return scene;
     }
 
 
