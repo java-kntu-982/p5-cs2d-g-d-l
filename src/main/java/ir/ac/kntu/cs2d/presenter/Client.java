@@ -14,21 +14,22 @@ public class Client extends Application {
         Socket sock=null;
         int serverPort=50128;
         String hostAddress="127.0.0.1";
-        Observer.enterName().show();
 
+        while (true){
             try
             {
                 sock = new Socket(hostAddress, serverPort);
+                System.out.println("Connected to server successfully ...");
+                Observer.enterName().show();
+                break;
 
             }
             catch(IOException io)
             {
                 System.out.println("Connection error!");
             }
-            System.out.println("Connected to server successfully ...");
 
-
-
+        }
 
     }
     public static void main() {

@@ -51,7 +51,7 @@ public class Observer  {
         imageView.setFitWidth(900);
         TextField UName=new TextField();
         UName.setMaxWidth(100);
-        Label userName=new Label("    User Name:");
+        Label userName=new Label("User Name:");
         userName.setTextFill(Color.WHITE);
         Button submit=new Button("Submit");
         VBox vBox=new VBox();
