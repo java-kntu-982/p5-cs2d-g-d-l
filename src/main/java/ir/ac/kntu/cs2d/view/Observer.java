@@ -1,5 +1,7 @@
 package ir.ac.kntu.cs2d.view;
 
+import ir.ac.kntu.cs2d.model.PistolGun;
+import ir.ac.kntu.cs2d.model.Solider;
 import ir.ac.kntu.cs2d.presenter.PlayerModel;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -24,14 +26,13 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.security.spec.RSAOtherPrimeInfo;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 public class Observer  {
 
     static LinkedList<Stage> stages = new LinkedList<>();
     static ArrayList<ArrayList<Integer>> mapTable = new ArrayList<>();
+    static Map<Circle,Solider> soliderMap=new HashMap<>();
 
     public static Stage createStage(){
         Stage stage = new Stage();
@@ -157,7 +158,7 @@ public class Observer  {
 
         System.out.println(endX+" "+iniX+" "+endY+" "+iniY);
 
-        setPlayerPos(playerPicture,30,50);
+        setPlayerPos(playerPicture,30,37);
 
         //setPlayerPos(randomTableX,randomTableY);
         playerPicture.setFill(new ImagePattern(new Image("file:src/main/resources/images/ct-top.png")));
@@ -190,6 +191,49 @@ public class Observer  {
                 rectangle.setY(7 * i);
             }
         }
+        ArrayList<Solider> soliders=new ArrayList<>();
+        for (int i=0;i<10;i++){
+            Solider solider=new Solider();
+            soliders.add(solider);
+        }
+        for (int i=0;i<5;i++) {
+            soliders.get(i).setTerrorist(false);
+            PistolGun pistolGun=new PistolGun();
+            soliders.get(i).setPistol(pistolGun.createUSP());
+        }
+        for (int i=5;i<10;i++) {
+            soliders.get(i).setTerrorist(true);
+            PistolGun pistolGun=new PistolGun();
+            soliders.get(i).setPistol(pistolGun.createGlock());
+        }
+        ArrayList<Circle> soliderPic=new ArrayList<>();
+        int i=0;
+        for (i=0;i<5;i++){
+
+            Circle circle=new Circle();
+            circle.setRadius(3.5);
+            circle.setFill(Color.BLUEVIOLET);
+            //setPlayersPos(circle,25,35);
+            soliderPic.add(circle);
+        }
+        for (i=5;i<10;i++){
+            Circle circle=new Circle();
+            circle.setRadius(3.5);
+            circle.setFill(Color.RED);
+
+            //setPlayersPos(circle,107,40);
+            soliderPic.add(circle);
+        }
+        for (i=0;i<10;i++){
+            soliderMap.put(soliderPic.get(i),soliders.get(i));
+        }
+        for (i=0;i<5;i++) {
+            setPlayersPos(soliderPic.get(i),25,35);
+        }
+        for (i=5;i<10;i++) {
+            setPlayersPos(soliderPic.get(i),107,40);
+        }
+
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             boolean moved = false;
@@ -215,7 +259,36 @@ public class Observer  {
                     moved = true;
                 }
             }
-            System.out.println(mapTable.get(PlayerModel.getTableY()).get(PlayerModel.getTableX()));
+           // System.out.println(mapTable.get(PlayerModel.getTableY()).get(PlayerModel.getTableX()));
+            //System.out.println(playerPicture.getCenterY());
+            for (Circle circle:soliderPic){
+                Random random=new Random();
+                int direction=random.nextInt(4)+1;
+                switch (direction){
+                    case 1:
+                        if(mapTable.get(soliderMap.get(circle).getTableY()).get(soliderMap.get(circle).getTableX()+1)<1 || mapTable.get(soliderMap.get(circle).getTableY()).get(soliderMap.get(circle).getTableX()+1)>4) {
+                            setPlayersPos(circle, soliderMap.get(circle).getTableX()+1, soliderMap.get(circle).getTableY());
+                        }
+                        break;
+                    case 2:
+                        if(mapTable.get(soliderMap.get(circle).getTableY()).get(soliderMap.get(circle).getTableX()-1)<1 || mapTable.get(soliderMap.get(circle).getTableY()).get(soliderMap.get(circle).getTableX()-1)>4) {
+                            setPlayersPos(circle, soliderMap.get(circle).getTableX() - 1, soliderMap.get(circle).getTableY());
+                        }
+                        break;
+                    case 3:
+                        if(mapTable.get(soliderMap.get(circle).getTableY()-1).get(soliderMap.get(circle).getTableX())<1 || mapTable.get(soliderMap.get(circle).getTableY()-1).get(soliderMap.get(circle).getTableX())>4) {
+                            setPlayersPos(circle,soliderMap.get(circle).getTableX() , soliderMap.get(circle).getTableY() - 1);
+                        }
+                        break;
+                    case 4:
+                        if(mapTable.get(soliderMap.get(circle).getTableY()+1).get(soliderMap.get(circle).getTableX())<1 || mapTable.get(soliderMap.get(circle).getTableY()+1).get(soliderMap.get(circle).getTableX())>4) {
+                            setPlayersPos(circle, soliderMap.get(circle).getTableX(), soliderMap.get(circle).getTableY()+ 1);
+                        }
+                        break;
+
+                        }
+            }
+
             if(moved){
                 camera.setTranslateX(playerPicture.getCenterX()-scene.getWidth()*0.12);
                 camera.setTranslateY(playerPicture.getCenterY()-scene.getHeight()*0.12);
@@ -223,6 +296,7 @@ public class Observer  {
         });
 //        scene.setCamera(camera);
 //
+        root.getChildren().addAll(soliderPic);
         root.getChildren().addAll(rectangles);
         root.getChildren().addAll(playerPicture);
         root.getChildren().add(camera);
@@ -248,7 +322,17 @@ public class Observer  {
         PlayerModel.setTableY(y);
         PlayerModel.setX(x*7);
         PlayerModel.setY(y*7);
-        playerPicture.setCenterX(PlayerModel.getX()+2.5);
-        playerPicture.setCenterY(PlayerModel.getY()+2.5);
+        playerPicture.setCenterX(PlayerModel.getX()+3.5);
+        playerPicture.setCenterY(PlayerModel.getY()+3.5);
     }
+    public static void setPlayersPos(Circle playerPicture,int x,int y){
+        soliderMap.get(playerPicture).setTableX(x);
+        soliderMap.get(playerPicture).setTableY(y);
+        soliderMap.get(playerPicture).setX(x*7);
+        soliderMap.get(playerPicture).setY(y*7);
+        playerPicture.setCenterX(soliderMap.get(playerPicture).getX()+3.5);
+        playerPicture.setCenterY(soliderMap.get(playerPicture).getY()+3.5);
+    }
+
+
 }

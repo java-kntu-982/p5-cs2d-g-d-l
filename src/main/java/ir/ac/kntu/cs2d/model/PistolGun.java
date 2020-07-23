@@ -2,7 +2,7 @@ package ir.ac.kntu.cs2d.model;
 
 public class PistolGun extends Gun{
 
-    public void createDeagle(){
+    public PistolGun createDeagle(){
         this.name = "Deagle";
         this.price = 650;
         this.damage = 34;
@@ -10,9 +10,10 @@ public class PistolGun extends Gun{
         this.reloadTime = 2.2;
         this.capacity = 7;
         this.teamID = 0;
+        return this;
     }
 
-    public void createGlock(){
+    public PistolGun createGlock(){
         this.name = "Glock";
         this.price = 400;
         this.damage = 21;
@@ -20,9 +21,10 @@ public class PistolGun extends Gun{
         this.reloadTime = 2.3;
         this.capacity = 20;
         this.teamID = 0;
+        return this;
     }
 
-    public void createUSP(){
+    public PistolGun createUSP(){
         this.name = "USP";
         this.price = 500;
         this.damage = 24;
@@ -30,5 +32,6 @@ public class PistolGun extends Gun{
         this.reloadTime = 2.2;
         this.capacity = 12;
         this.teamID = 0;
+        return this;
     }
 }
