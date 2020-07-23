@@ -17,13 +17,13 @@ public class PlayerModel extends Application {
     private static int serverPort=50128;
     private static String hostAddress="127.0.0.1";
 
-    private int x;
-    private int y;
-    private int tableX;
-    private int tableY;
-    private PistolGun pistol;
-    private MainGun mainGun;
-    private int health;
+    private static int x;
+    private static int y;
+    private static int tableX;
+    private static int tableY;
+    private static PistolGun pistol;
+    private static MainGun mainGun;
+    private static int health;
     private static int id;
     private static String name;
     private boolean terrorist;
@@ -77,63 +77,63 @@ public class PlayerModel extends Application {
 
     }
 
-    public int getX() {
+    public static int getX() {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public static void setX(int x) {
+        PlayerModel.x = x;
     }
 
-    public int getY() {
+    public static int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public static void setY(int y) {
+        PlayerModel.y = y;
     }
 
-    public int getTableX() {
+    public static int getTableX() {
         return tableX;
     }
 
-    public void setTableX(int tableX) {
-        this.tableX = tableX;
+    public static void setTableX(int tableX) {
+        PlayerModel.tableX = tableX;
     }
 
-    public int getTableY() {
+    public static int getTableY() {
         return tableY;
     }
 
-    public void setTableY(int tableY) {
-        this.tableY = tableY;
+    public static void setTableY(int tableY) {
+        PlayerModel.tableY = tableY;
     }
 
-    public PistolGun getPistol() {
+    public static PistolGun getPistol() {
         return pistol;
     }
 
-    public void setPistol(PistolGun pistol) {
-        this.pistol = pistol;
+    public static void setPistol(PistolGun pistol) {
+        PlayerModel.pistol = pistol;
     }
 
-    public MainGun getMainGun() {
+    public static MainGun getMainGun() {
         return mainGun;
     }
 
-    public void setMainGun(MainGun mainGun) {
-        this.mainGun = mainGun;
+    public static void setMainGun(MainGun mainGun) {
+        PlayerModel.mainGun = mainGun;
     }
 
-    public int getHealth() {
+    public static int getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public static void setHealth(int health) {
+        PlayerModel.health = health;
     }
 
-    public int getId() {
+    public static int getId() {
         return id;
     }
 
@@ -141,7 +141,7 @@ public class PlayerModel extends Application {
         PlayerModel.id = id;
     }
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 

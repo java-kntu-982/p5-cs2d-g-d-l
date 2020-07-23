@@ -23,12 +23,15 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Observer  {
 
     static LinkedList<Stage> stages = new LinkedList<>();
+    static ArrayList<ArrayList<Integer>> mapTable = new ArrayList<>();
 
     public static Stage createStage(){
         Stage stage = new Stage();
@@ -114,6 +117,7 @@ public class Observer  {
 
     }
     public static Scene startGame() throws IOException {
+        getMapTable();
         Group root = new Group();
         Scene scene = new Scene(root,840,700,true);
         Stage primaryStage =new Stage();
@@ -125,9 +129,37 @@ public class Observer  {
         scene.setCamera(camera);
 
         Circle playerPicture = new Circle();
-        playerPicture.setRadius(3);
-        playerPicture.setCenterY(80);
-        playerPicture.setCenterX(50);
+        playerPicture.setRadius(3.5);
+        int iniX=0,iniY=0,endX=0,endY=0;
+        for(int i=0;i<mapTable.size();i++){
+            for(int j=0;j<mapTable.get(i).size();j++){
+                if(mapTable.get(i).get(j) == 7){
+                    iniX = i;
+                    iniY = j;
+                    break;
+                }
+            }
+        }
+        for(int i=0;i<mapTable.size();i++) {
+            for (int j = 0; j < mapTable.get(i).size(); j++) {
+                if (mapTable.get(i).get(j) == 7 && mapTable.get(i).get(j+1) != 7) {
+                    endX = i;
+                }
+                if (mapTable.get(i).get(j) == 7 && mapTable.get(i+1).get(j) != 7) {
+                    endY = j;
+                    break;
+                }
+            }
+        }
+
+        //int randomTableX = new Random().nextInt(endX-iniX)+iniX;
+        //int randomTableY = new Random().nextInt(endY-iniY)+iniY;
+
+        System.out.println(endX+" "+iniX+" "+endY+" "+iniY);
+
+        setPlayerPos(playerPicture,30,50);
+
+        //setPlayerPos(randomTableX,randomTableY);
         playerPicture.setFill(new ImagePattern(new Image("file:src/main/resources/images/ct-top.png")));
 
         ImageCursor cursor = new ImageCursor(new Image("file:src/main/resources/images/aim-cursor.png"));
@@ -136,21 +168,8 @@ public class Observer  {
         camera.setTranslateX(playerPicture.getCenterX()-scene.getWidth()*0.12);
         camera.setTranslateY(playerPicture.getCenterY()-scene.getHeight()*0.12);
 
-        ArrayList<ArrayList<Integer>> mapTable = new ArrayList<>();
+
         ArrayList<Rectangle> rectangles = new ArrayList<>();
-
-        try(BufferedReader reader = new BufferedReader(new FileReader(new File("src/main/resources/maps/dust2.txt")))) {
-            String line;
-            while ((line=reader.readLine()) != null){
-                ArrayList<Integer> temp = new ArrayList<>();
-                for(int i=0;i<line.length();i++){
-                    temp.add(Integer.parseInt(String.valueOf(line.charAt(i))));
-
-                }
-                mapTable.add(temp);
-            }
-        }
-
         for(int i=0;i<mapTable.size();i++){
             for(int j=0;j<mapTable.get(i).size();j++){
 
@@ -172,22 +191,35 @@ public class Observer  {
             }
         }
 
-//        ParallelCamera camera = new ParallelCamera();
-//        camera.setScaleY(0.24);
-//        camera.setScaleX(0.24);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            boolean moved = false;
             if(event.getCode().equals(KeyCode.RIGHT)){
-                playerPicture.setCenterX(playerPicture.getCenterX()+5);
-            } else if(event.getCode().equals(KeyCode.LEFT)){
-                playerPicture.setCenterX(playerPicture.getCenterX()-5);
-            }else if(event.getCode().equals(KeyCode.UP)){
-                playerPicture.setCenterY(playerPicture.getCenterY()-5);
-            }else if(event.getCode().equals(KeyCode.DOWN)){
-                playerPicture.setCenterY(playerPicture.getCenterY()+5);
-            }
+                if(mapTable.get(PlayerModel.getTableY()).get(PlayerModel.getTableX()+1)<1 || mapTable.get(PlayerModel.getTableY()).get(PlayerModel.getTableX()+1)>4){
+                    setPlayerPos(playerPicture,PlayerModel.getTableX()+1,PlayerModel.getTableY());
+                    moved = true;
+                }
 
-            camera.setTranslateX(playerPicture.getCenterX()-scene.getWidth()*0.12);
-            camera.setTranslateY(playerPicture.getCenterY()-scene.getHeight()*0.12);
+            } else if(event.getCode().equals(KeyCode.LEFT)){
+                if(mapTable.get(PlayerModel.getTableY()).get(PlayerModel.getTableX()-1)<1 || mapTable.get(PlayerModel.getTableY()).get(PlayerModel.getTableX()-1)>4){
+                    setPlayerPos(playerPicture,PlayerModel.getTableX()-1,PlayerModel.getTableY());
+                    moved = true;
+                }
+            }else if(event.getCode().equals(KeyCode.UP)){
+                if(mapTable.get(PlayerModel.getTableY()-1).get(PlayerModel.getTableX())<1 || mapTable.get(PlayerModel.getTableY()-1).get(PlayerModel.getTableX())>4){
+                    setPlayerPos(playerPicture,PlayerModel.getTableX(),PlayerModel.getTableY()-1);
+                    moved = true;
+                }
+            }else if(event.getCode().equals(KeyCode.DOWN)){
+                if(mapTable.get(PlayerModel.getTableY()+1).get(PlayerModel.getTableX())<1 || mapTable.get(PlayerModel.getTableY()+1).get(PlayerModel.getTableX())>4){
+                    setPlayerPos(playerPicture,PlayerModel.getTableX(),PlayerModel.getTableY()+1);
+                    moved = true;
+                }
+            }
+            System.out.println(mapTable.get(PlayerModel.getTableY()).get(PlayerModel.getTableX()));
+            if(moved){
+                camera.setTranslateX(playerPicture.getCenterX()-scene.getWidth()*0.12);
+                camera.setTranslateY(playerPicture.getCenterY()-scene.getHeight()*0.12);
+            }
         });
 //        scene.setCamera(camera);
 //
@@ -197,7 +229,26 @@ public class Observer  {
         return scene;
     }
 
-    public static void addPlayer(Scene scene,Group group){
+    public static void getMapTable(){
+        try(BufferedReader reader = new BufferedReader(new FileReader(new File("src/main/resources/maps/dust2.txt")))) {
+            String line;
+            while ((line=reader.readLine()) != null){
+                ArrayList<Integer> temp = new ArrayList<>();
+                for(int i=0;i<line.length();i++){
+                    temp.add(Integer.parseInt(String.valueOf(line.charAt(i))));
 
+                }
+                mapTable.add(temp);
+            }
+        } catch (Exception ignored){}
+    }
+
+    public static void setPlayerPos(Circle playerPicture,int x,int y){
+        PlayerModel.setTableX(x);
+        PlayerModel.setTableY(y);
+        PlayerModel.setX(x*7);
+        PlayerModel.setY(y*7);
+        playerPicture.setCenterX(PlayerModel.getX()-3.5);
+        playerPicture.setCenterY(PlayerModel.getY()-3.5);
     }
 }
