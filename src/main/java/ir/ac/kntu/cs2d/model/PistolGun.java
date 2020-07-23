@@ -1,6 +1,9 @@
 package ir.ac.kntu.cs2d.model;
 
+import java.util.ArrayList;
+
 public class PistolGun extends Gun{
+    public  ArrayList<PistolGun> pistolGuns=new ArrayList<>();
 
     public PistolGun createDeagle(){
         this.name = "Deagle";
@@ -11,6 +14,13 @@ public class PistolGun extends Gun{
         this.capacity = 7;
         this.teamID = 0;
         return this;
+    }
+
+    public void setPistolGuns() {
+        pistolGuns.add(this.createDeagle());
+        pistolGuns.add(this.createGlock());
+        pistolGuns.add(this.createUSP());
+
     }
 
     public PistolGun createGlock(){
@@ -34,4 +44,5 @@ public class PistolGun extends Gun{
         this.teamID = 0;
         return this;
     }
+
 }

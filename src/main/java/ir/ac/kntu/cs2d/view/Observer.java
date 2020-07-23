@@ -1,9 +1,11 @@
 package ir.ac.kntu.cs2d.view;
 
+import ir.ac.kntu.cs2d.model.MainGun;
 import ir.ac.kntu.cs2d.model.PistolGun;
 import ir.ac.kntu.cs2d.model.Solider;
 import ir.ac.kntu.cs2d.presenter.PlayerModel;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
@@ -16,12 +18,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -257,6 +261,288 @@ public class Observer  {
                 if(mapTable.get(PlayerModel.getTableY()+1).get(PlayerModel.getTableX())<1 || mapTable.get(PlayerModel.getTableY()+1).get(PlayerModel.getTableX())>4){
                     setPlayerPos(playerPicture,PlayerModel.getTableX(),PlayerModel.getTableY()+1);
                     moved = true;
+                }
+            }
+            else if (event.getCode().equals(KeyCode.B)){
+                if (mapTable.get(PlayerModel.getTableY()+1).get(PlayerModel.getTableX())==7){
+                    Stage s=new Stage();
+                    Image image = null;
+                    try {
+                        image = new Image(new FileInputStream("./src/main/resources/images/back.jpg"));
+                    } catch (FileNotFoundException fileNotFoundException) {
+                        fileNotFoundException.printStackTrace();
+                    }
+                    ImageView imageView = new ImageView(image);
+                    imageView.setX(0);
+                    imageView.setY(0);
+                    imageView.setFitHeight(500);
+                    imageView.setFitWidth(450);
+                    Group root1 = new Group(imageView);
+                    Scene scene1 = new Scene(root1, 450, 500);
+                    Label l1=new Label("Glock");
+                    Label l2=new Label("USP");
+                    Label l3=new Label("Deagle");
+                    Label l4=new Label("M4A1");
+                    Label l5=new Label("Famas");
+                    Label l6=new Label("MP5");
+                    ArrayList<Label> labels=new ArrayList<>();labels.add(l1);labels.add(l2);labels.add(l3);labels.add(l4);labels.add(l5);labels.add(l6);
+                    Text inf=new Text();
+                    Text buy=new Text();
+                    Text money=new Text();
+                    PistolGun pistolGun=new PistolGun();
+                    pistolGun.setPistolGuns();
+                    MainGun mainGun=new MainGun();
+                    mainGun.setMainGuns();
+                    VBox vBox=new VBox(l1,l2,l3,l4,l5,l6);
+                    vBox.setTranslateX(10);
+                    vBox.setTranslateY(10);
+                    vBox.setSpacing(10);
+                    root1.getChildren().addAll(vBox);
+                    root1.getChildren().addAll(inf,buy,money);
+                    PlayerModel.setMoney(800);
+
+                    for (Label label:labels){
+                        label.setTextFill(Color.WHITE);
+                        label.setFont(Font.font("Cambria",25));
+                        label.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                label.setScaleX(1.2);
+                                label.setScaleY(1.2);
+                            }
+                        });
+                        label.setOnMouseExited(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                label.setScaleX(1);
+                                label.setScaleY(1);
+                            }
+                        });
+                        label.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                if (label.getText().equals("Famas")){
+                                    inf.setText("Price :2250      Damage :14");
+                                    inf.setTranslateY(280);
+                                    inf.setFont(Font.font("Cambria",28));
+                                    inf.setFill(Color.CYAN);
+                                    buy.setText("Buy                "+PlayerModel.getMoney());
+                                    buy.setFont(Font.font("Cambria",30));
+                                    buy.setTranslateX(20);
+                                    buy.setTranslateY(330);
+                                    buy.setFill(Color.LIGHTSTEELBLUE);
+                                    buy.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1.2);
+                                            buy.setScaleY(1.2);
+                                        }
+                                    });
+                                    buy.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1);
+                                            buy.setScaleY(1);
+                                        }
+                                    });
+                                    buy.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setText("Buy                "+PlayerModel.getMoney());
+                                            if (PlayerModel.getMoney()>=2250){
+                                                PlayerModel.setMoney(PlayerModel.getMoney()-2250);
+                                                buy.setText("Buy                "+PlayerModel.getMoney());
+//                                                buy.setFont(Font.font("Cambria",30));
+                                            }
+                                        }
+                                    });
+                                }
+                                if (label.getText().equals("M4A1")){
+                                    inf.setText("Price :400      Damage :22");
+                                    inf.setTranslateY(280);
+                                    inf.setFont(Font.font("Cambria",28));
+                                    inf.setFill(Color.CYAN);
+                                    buy.setText("Buy                "+PlayerModel.getMoney());
+                                    buy.setFont(Font.font("Cambria",30));
+                                    buy.setTranslateX(20);
+                                    buy.setTranslateY(330);
+                                    buy.setFill(Color.LIGHTSTEELBLUE);
+                                    buy.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1.2);
+                                            buy.setScaleY(1.2);
+                                        }
+                                    });
+                                    buy.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1);
+                                            buy.setScaleY(1);
+                                        }
+                                    });
+                                    buy.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            if (PlayerModel.getMoney()>=400){
+                                                PlayerModel.setMoney(PlayerModel.getMoney()-400);
+                                                buy.setText("Buy                "+PlayerModel.getMoney());
+//                                                buy.setFont(Font.font("Cambria",30));
+                                            }
+                                        }
+                                    });
+                                }
+                                if (label.getText().equals("Deagle")){
+                                    inf.setText("Price :650      Damage :34");
+
+                                    inf.setTranslateY(280);
+                                    inf.setFont(Font.font("Cambria",28));
+                                    inf.setFill(Color.CYAN);
+                                    buy.setText("Buy                "+PlayerModel.getMoney());
+                                    buy.setFont(Font.font("Cambria",30));
+                                    buy.setTranslateX(20);
+                                    buy.setTranslateY(330);
+                                    buy.setFill(Color.LIGHTSTEELBLUE);
+                                    buy.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1.2);
+                                            buy.setScaleY(1.2);
+                                        }
+                                    });
+                                    buy.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1);
+                                            buy.setScaleY(1);
+                                        }
+                                    });
+                                    buy.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            if (PlayerModel.getMoney()>=650){
+                                                PlayerModel.setMoney(PlayerModel.getMoney()-650);
+                                                buy.setText("Buy                "+PlayerModel.getMoney());
+//                                                buy.setFont(Font.font("Cambria",30));
+                                            }
+                                        }
+                                    });
+                                }
+                                if (label.getText().equals("USP")){
+                                    inf.setText("Price :500      Damage :24");
+                                    inf.setTranslateY(280);
+                                    inf.setFont(Font.font("Cambria",28));
+                                    inf.setFill(Color.CYAN);
+                                    buy.setText("Buy                "+PlayerModel.getMoney());
+                                    buy.setTranslateX(20);
+                                    buy.setTranslateY(330);
+                                    buy.setFont(Font.font("Cambria",30));
+                                    buy.setFill(Color.LIGHTSTEELBLUE);
+                                    buy.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1.2);
+                                            buy.setScaleY(1.2);
+                                        }
+                                    });
+                                    buy.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1);
+                                            buy.setScaleY(1);
+                                        }
+                                    });
+                                    buy.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            if (PlayerModel.getMoney()>=500){
+                                                PlayerModel.setMoney(PlayerModel.getMoney()-500);
+                                                buy.setText("Buy                "+PlayerModel.getMoney());
+//                                                buy.setFont(Font.font("Cambria",30));
+                                            }
+                                        }
+                                    });
+                                }
+                                if (label.getText().equals("Glock")){
+                                    inf.setText("Price :400      Damage :21");
+                                    inf.setTranslateY(280);
+                                    inf.setFont(Font.font("Cambria",28));
+                                    inf.setFill(Color.CYAN);
+                                    buy.setText("Buy                "+PlayerModel.getMoney());
+                                    buy.setFont(Font.font("Cambria",30));
+                                    buy.setTranslateX(20);
+                                    buy.setTranslateY(330);
+                                    buy.setFill(Color.LIGHTSTEELBLUE);
+                                    buy.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1.2);
+                                            buy.setScaleY(1.2);
+                                        }
+                                    });
+                                    buy.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1);
+                                            buy.setScaleY(1);
+                                        }
+                                    });
+                                    buy.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            if (PlayerModel.getMoney()>=400){
+                                                PlayerModel.setMoney(PlayerModel.getMoney()-400);
+                                                buy.setText("Buy                "+PlayerModel.getMoney());
+
+                                            }
+                                        }
+                                    });
+                                }
+                                if (label.getText().equals("MP5")){
+                                    money.setText(""+PlayerModel.getMoney());
+                                    money.setTranslateX(200);
+                                    inf.setText("Price :1500$      Damage :13");
+                                    inf.setTranslateY(280);
+                                    inf.setFont(Font.font("Cambria",28));
+                                    inf.setFill(Color.CYAN);
+                                    buy.setText("Buy                "+PlayerModel.getMoney());
+
+                                    buy.setFont(Font.font("Cambria",30));
+                                    buy.setTranslateX(20);
+                                    buy.setTranslateY(330);
+                                    buy.setFill(Color.LIGHTSTEELBLUE);
+                                    buy.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1.2);
+                                            buy.setScaleY(1.2);
+                                        }
+                                    });
+                                    buy.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setScaleX(1);
+                                            buy.setScaleY(1);
+                                        }
+                                    });
+                                    buy.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            buy.setText("Buy                "+PlayerModel.getMoney());
+                                            if (PlayerModel.getMoney()>=1500){
+                                                PlayerModel.setMoney(PlayerModel.getMoney()-1500);
+                                                buy.setText("Buy                "+PlayerModel.getMoney());
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                    }
+                    //root.getChildren().addAll(vBox);
+                    s.setScene(scene1);
+                    s.show();
                 }
             }
            // System.out.println(mapTable.get(PlayerModel.getTableY()).get(PlayerModel.getTableX()));

@@ -28,14 +28,14 @@ public class PlayerModel extends Application {
     private static String name;
     private boolean terrorist;
     private boolean bot;
-    private int money;
+    private static int money;
 
-    public int getMoney() {
+    public static int getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
-        this.money = money;
+    public static void setMoney(int money) {
+        PlayerModel.money = money;
     }
 
     private static BufferedReader serverMs;
