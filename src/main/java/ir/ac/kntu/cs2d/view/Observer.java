@@ -248,7 +248,7 @@ public class Observer  {
         PlayerModel.setTableY(y);
         PlayerModel.setX(x*7);
         PlayerModel.setY(y*7);
-        playerPicture.setCenterX(PlayerModel.getX()-3.5);
-        playerPicture.setCenterY(PlayerModel.getY()-3.5);
+        playerPicture.setCenterX(PlayerModel.getX()+2.5);
+        playerPicture.setCenterY(PlayerModel.getY()+2.5);
     }
 }

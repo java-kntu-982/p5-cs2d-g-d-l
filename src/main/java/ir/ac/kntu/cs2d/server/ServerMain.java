@@ -31,6 +31,7 @@ public class ServerMain {
             }
         }
         while (true){
+
             try {
                 client = socket.accept();
                 ClientHandler clientHandler = new ClientHandler(client,clients.size()+1);
