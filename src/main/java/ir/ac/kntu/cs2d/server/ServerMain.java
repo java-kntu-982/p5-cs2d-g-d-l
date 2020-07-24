@@ -1,6 +1,7 @@
 package ir.ac.kntu.cs2d.server;
 
 import ir.ac.kntu.cs2d.presenter.PlayerModel;
+import ir.ac.kntu.cs2d.view.Observer;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -37,6 +38,7 @@ public class ServerMain {
                 ClientHandler clientHandler = new ClientHandler(client,clients.size()+1);
                 clients.add(clientHandler);
                 System.out.println("Player number " + clients.size() + " joined");
+
                 break;
 
             } catch (IOException ignored) {

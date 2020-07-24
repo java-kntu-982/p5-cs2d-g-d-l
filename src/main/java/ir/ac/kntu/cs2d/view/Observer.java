@@ -20,6 +20,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -37,6 +39,16 @@ public class Observer  {
     static LinkedList<Stage> stages = new LinkedList<>();
     static ArrayList<ArrayList<Integer>> mapTable = new ArrayList<>();
     static Map<Circle,Solider> soliderMap=new HashMap<>();
+    private static String name;
+
+
+    public static String getName() {
+        return name;
+    }
+
+    public static void setName(String name) {
+        Observer.name = name;
+    }
 
     public static Stage createStage(){
         Stage stage = new Stage();
@@ -51,6 +63,11 @@ public class Observer  {
         imageView.setY(0);
         imageView.setFitHeight(600);
         imageView.setFitWidth(900);
+        String musicFile = "./src/main/java/music.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setVolume(20);
+        mediaPlayer.play();
         TextField UName=new TextField();
         UName.setMaxWidth(100);
         Label userName=new Label("User Name:");
@@ -67,6 +84,8 @@ public class Observer  {
                 try {
                     PlayerModel.setName(UName.getText());
                     stage.setScene(clientMenu(stage));
+                    name=UName.getText();
+                    System.out.println("Hello "+ Observer.getName());
                 } catch (FileNotFoundException fileNotFoundException) {
                     fileNotFoundException.printStackTrace();
                 }
